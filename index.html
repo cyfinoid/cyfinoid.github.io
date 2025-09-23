@@ -1,15 +1,518 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Cyfinoid Research</title>
+	<title>Cyfinoid Research - Security Tools & Projects</title>
+	<meta name="description" content="Cyfinoid's collection of security tools and research projects including software supply chain analysis, Android assessment, cloud security, and more.">
 	<meta name="google-site-verification" content="tHcAMpPTapoYzOgWdesNWYsiWH3WlVvcNNbNDRkfY-Y" />
     <script defer data-domain="cyfinoid.github.io" src="https://plausible.io/js/script.outbound-links.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
+	<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+	
+	<!-- Google Fonts - Sen -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+	
+	<style>
+		:root {
+			--bg-primary: #121212;
+			--bg-secondary: #fafafa;
+			--text-primary: #50c878;
+			--text-secondary: #8a8f98;
+			--yellow: #fdcb52;
+			--red: #d63c53;
+			--blue: #466fe0;
+			--green: #7fd1b9;
+			--dirty-yellow: #b6a189;
+			--black: #1e1e1e;
+		}
+		
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Sen', sans-serif;
+			background-color: var(--bg-primary);
+			color: var(--text-primary);
+			line-height: 1.6;
+			font-size: 16px;
+		}
+		
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+		
+		.nav-header {
+			background: transparent;
+			border: none;
+			padding: 30px 0 0;
+			margin: 0;
+		}
+		
+		.nav-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 30px;
+		}
+		
+		.nav-link {
+			display: inline-flex;
+			align-items: center;
+			padding: 10px 20px;
+			background: transparent;
+			color: var(--text-primary);
+			text-decoration: none;
+			border: 1px solid var(--text-secondary);
+			border-radius: 8px;
+			font-size: 16px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.nav-link::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, var(--blue), var(--green));
+			transition: left 0.3s ease;
+			z-index: -1;
+		}
+		
+		.nav-link:hover {
+			color: white;
+			border-color: var(--text-primary);
+			transform: translateY(-2px);
+		}
+		
+		.nav-link:hover::before {
+			left: 0;
+		}
+		
+		.nav-link::after {
+			content: '';
+			display: inline-block;
+			width: 18px;
+			height: 18px;
+			margin-left: 8px;
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+		
+		.nav-link.github::after {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2350c878'%3E%3Cpath d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/%3E%3C/svg%3E");
+		}
+		
+		.nav-link.trainings::after {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2350c878'%3E%3Cpath d='M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z'/%3E%3C/svg%3E");
+		}
+		
+		.nav-link.opensource::after {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2350c878'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
+		}
+		
+		.nav-link.website::after {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2350c878'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E");
+		}
+		
+		header {
+			text-align: center;
+			padding: 60px 0 40px;
+			border-bottom: 2px solid var(--text-primary);
+			margin-bottom: 60px;
+		}
+		
+		.title {
+			font-size: 42px;
+			font-weight: 800;
+			margin-bottom: 20px;
+			background: linear-gradient(135deg, var(--text-primary), var(--blue));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+		
+		.subtitle {
+			font-size: 36px;
+			font-weight: 700;
+			color: var(--text-secondary);
+			margin-bottom: 20px;
+		}
+		
+		.description {
+			font-size: 20px;
+			color: var(--text-secondary);
+			max-width: 800px;
+			margin: 0 auto;
+		}
+		
+		.category {
+			margin-bottom: 80px;
+		}
+		
+		.category-header {
+			font-size: 32px;
+			font-weight: 700;
+			margin-bottom: 30px;
+			padding-bottom: 15px;
+			border-bottom: 1px solid var(--text-primary);
+			position: relative;
+		}
+		
+		.category-header::after {
+			content: '';
+			position: absolute;
+			bottom: -1px;
+			left: 0;
+			width: 60px;
+			height: 3px;
+			background: var(--yellow);
+		}
+		
+		.projects-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+			gap: 30px;
+			margin-top: 30px;
+		}
+		
+		.project-card {
+			background: var(--black);
+			border: 1px solid var(--text-secondary);
+			border-radius: 12px;
+			padding: 25px;
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+		
+		.project-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 3px;
+			background: linear-gradient(90deg, var(--blue), var(--green));
+		}
+		
+		.project-card:hover {
+			transform: translateY(-5px);
+			border-color: var(--text-primary);
+			box-shadow: 0 10px 30px rgba(80, 200, 120, 0.1);
+		}
+		
+		.project-title {
+			font-size: 24px;
+			font-weight: 700;
+			margin-bottom: 15px;
+			color: var(--text-primary);
+		}
+		
+		.project-description {
+			font-size: 16px;
+			color: var(--text-secondary);
+			margin-bottom: 20px;
+			line-height: 1.5;
+			flex-grow: 1;
+		}
+		
+		.project-links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 15px;
+			justify-content: center;
+			margin-top: auto;
+		}
+		
+		.project-link {
+			display: inline-flex;
+			align-items: center;
+			padding: 8px 16px;
+			background: var(--blue);
+			color: white;
+			text-decoration: none;
+			border-radius: 6px;
+			font-size: 14px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+		
+		.project-link:hover {
+			background: var(--text-primary);
+			transform: translateY(-2px);
+		}
+		
+		.project-link.github {
+			background: var(--black);
+			border: 1px solid var(--text-secondary);
+		}
+		
+		.project-link.github:hover {
+			background: var(--text-primary);
+			border-color: var(--text-primary);
+		}
+		
+		.project-link.demo {
+			background: var(--green);
+		}
+		
+		.project-link.demo:hover {
+			background: var(--yellow);
+			color: var(--black);
+		}
+		
+		.project-link.pypi {
+			background: var(--red);
+		}
+		
+		.project-link.pypi:hover {
+			background: var(--dirty-yellow);
+			color: var(--black);
+		}
+		
+		.project-link::before {
+			content: '';
+			display: inline-block;
+			width: 16px;
+			height: 16px;
+			margin-right: 8px;
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+		
+		.project-link.github::before {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2350c878'%3E%3Cpath d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/%3E%3C/svg%3E");
+		}
+		
+		.project-link.demo::before {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
+		}
+		
+		.project-link.pypi::before {
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
+		}
+		
+		footer {
+			text-align: center;
+			padding: 60px 0 40px;
+			border-top: 2px solid var(--text-primary);
+			margin-top: 80px;
+		}
+		
+		.footer-text {
+			font-size: 16px;
+			color: var(--text-secondary);
+		}
+		
+		@media (max-width: 768px) {
+			.nav-container {
+				gap: 15px;
+			}
+			
+			.nav-link {
+				padding: 8px 16px;
+				font-size: 14px;
+			}
+			
+			.title {
+				font-size: 32px;
+			}
+			
+			.subtitle {
+				font-size: 28px;
+			}
+			
+			.category-header {
+				font-size: 28px;
+			}
+			
+			.projects-grid {
+				grid-template-columns: 1fr;
+			}
+			
+			.project-links {
+				flex-direction: column;
+			}
+			
+			.project-link {
+				justify-content: center;
+			}
+		}
+	</style>
 </head>
 <body>
+	<div class="container">
+		<header>
+			<h1 class="title">Cyfinoid Research</h1>
+			<h2 class="subtitle">Security Tools & Projects</h2>
+			<p class="description">
+				A comprehensive collection of security research tools and projects covering software supply chain analysis, 
+				Android assessment, cloud security, fediverse monitoring, and AI experiments.
+			</p>
+			
+			<nav class="nav-header">
+				<div class="nav-container">
+					<a href="https://github.com/cyfinoid" class="nav-link github" target="_blank" rel="noopener">GitHub</a>
+					<a href="https://cyfinoid.com/trainings/#upcoming-trainings" class="nav-link trainings" target="_blank" rel="noopener">Trainings</a>
+					<a href="https://cyfinoid.com/opensource-by-cyfinoid/" class="nav-link opensource" target="_blank" rel="noopener">Open Source</a>
+					<a href="https://cyfinoid.com/" class="nav-link website" target="_blank" rel="noopener">Website</a>
+				</div>
+			</nav>
+		</header>
 
+		<main>
+			<!-- Software Supply Chain Tools -->
+			<section class="category">
+				<h2 class="category-header">Software Supply Chain Tools</h2>
+				<div class="projects-grid">
+					<div class="project-card">
+						<h3 class="project-title">SBoM Play</h3>
+						<p class="project-description">
+							A web-based tool for analyzing Software Bill of Materials (SBOM) data from GitHub repositories, 
+							organizations, and users. Helps identify security vulnerabilities and dependencies in software projects.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/sbomplay" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+							<a href="https://cyfinoid.github.io/sbomplay/" class="project-link demo" target="_blank" rel="noopener">Live Demo</a>
+						</div>
+					</div>
+					
+					<div class="project-card">
+						<h3 class="project-title">3P Tracer</h3>
+						<p class="project-description">
+							Third Party Tracer - A DNS-based tool for tracking and analyzing third-party dependencies 
+							and their security implications in software projects.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/3ptracer" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+							<a href="https://cyfinoid.github.io/3ptracer" class="project-link demo" target="_blank" rel="noopener">Live Demo</a>
+						</div>
+					</div>
+					
+					<div class="project-card">
+						<h3 class="project-title">keychecker</h3>
+						<p class="project-description">
+							A fast CLI tool to fingerprint SSH private keys and identify which Git hosting accounts 
+							they unlock (GitHub, GitLab, Bitbucket, Codeberg, Gitea, Hugging Face).
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/keychecker" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+							<a href="https://pypi.org/project/keychecker" class="project-link pypi" target="_blank" rel="noopener">PyPI</a>
+						</div>
+					</div>
+					
+					<div class="project-card">
+						<h3 class="project-title">GH Navigator</h3>
+						<p class="project-description">
+							GitHub navigator via ghtoken and mass token validation. A powerful tool for managing 
+							and validating GitHub tokens across multiple repositories and organizations.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/ghnavigator" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+							<a href="https://cyfinoid.github.io/ghnavigator" class="project-link demo" target="_blank" rel="noopener">Live Demo</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Android Assessment -->
+			<section class="category">
+				<h2 class="category-header">Android Assessment</h2>
+				<div class="projects-grid">
+					<div class="project-card">
+						<h3 class="project-title">CFYVuln-Android</h3>
+						<p class="project-description">
+							Intentionally Vulnerable Android Application designed for security testing and educational purposes. 
+							Perfect for learning Android security assessment techniques.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/CFYVuln-android" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+						</div>
+					</div>
+					
+					<div class="project-card">
+						<h3 class="project-title">APK Analysis Automation</h3>
+						<p class="project-description">
+							A comprehensive project to streamline and automate multiple APK analysis tooling and aggregate results. 
+							Simplifies the process of Android application security assessment.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/apk-analysis-automation" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Fediverse -->
+			<section class="category">
+				<h2 class="category-header">Fediverse</h2>
+				<div class="projects-grid">
+					<div class="project-card">
+						<h3 class="project-title">Fediverse Monitoring</h3>
+						<p class="project-description">
+							A project to gather comprehensive statistics about fediverse software from across the internet. 
+							Provides insights into the distributed social media ecosystem.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/fediverse-monitoring" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+						</div>
+					</div>
+					
+					<div class="project-card">
+						<h3 class="project-title">Fediverse OSINT</h3>
+						<p class="project-description">
+							Open Source Intelligence (OSINT) tools specifically designed for fediverse instances. 
+							Enables security researchers to gather information about distributed social networks.
+						</p>
+						<div class="project-links">
+							<a href="https://github.com/cyfinoid/fediverse_osint" class="project-link github" target="_blank" rel="noopener">GitHub</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- AI Experiments -->
+			<section class="category">
+				<h2 class="category-header">AI Experiments</h2>
+				<div class="projects-grid">
+					<div class="project-card">
+						<h3 class="project-title">Council of Bots</h3>
+						<p class="project-description">
+							An innovative platform that simulates group discussions and feedback sessions using AI personas. 
+							Instead of getting a single AI response, present your ideas to different "councils" made up of 
+							AI personas with distinct personalities, expertise, and perspectives.
+						</p>
+						<div class="project-links">
+							<a href="https://aibotcouncil.anantshri.info" class="project-link demo" target="_blank" rel="noopener">Live Demo</a>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<p class="footer-text">
+				© 2025 Cyfinoid Research. All projects are open source and available for security research and educational purposes.
+			</p>
+		</footer>
+	</div>
 </body>
 </html>
